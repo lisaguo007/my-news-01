@@ -1,5 +1,7 @@
 <template>
-  <div>这是注册组件</div>
+  <div class="register">
+    <my-header>注册</my-header>
+  </div>
 </template>
 
 <script>
