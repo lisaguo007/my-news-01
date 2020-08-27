@@ -1,6 +1,6 @@
 <template>
   <div class='my-header'>
-    <div class="arrow">
+    <div class="arrow" @click='back'>
       <span class="iconfont iconjiantou2"></span>
     </div>
     <div class="title"><slot></slot></div>
@@ -10,7 +10,11 @@
 
 <script>
 export default {
-
+  methods: {
+    back() {
+      this.$router.go(-1)
+    }
+  }
 }
 </script>
 
