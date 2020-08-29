@@ -31,6 +31,11 @@
 <script>
 // import axios from 'axios'
 export default {
+  created() {
+    const { username, password } = this.$route.params
+    this.username = username
+    this.password = password
+  },
   methods: {
     async onSubmit() {
       const res = await this.$axios.post('/login', {
