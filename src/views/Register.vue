@@ -46,6 +46,7 @@ export default {
       })
       const { statusCode, message } = res.data
       if (statusCode === 200) {
+        console.log(111)
         this.$toast.success(message)
         this.$router.push({
           name: 'login',
@@ -82,4 +83,15 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang='less'>
+p {
+  font-size: 14px;
+  padding-top: 6px;
+  padding-right: 20px;
+  color: rgb(109, 109, 109);
+  text-align: right;
+  a {
+    color: rgb(255, 161, 37);
+  }
+}
+</style>

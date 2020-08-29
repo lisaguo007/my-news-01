@@ -29,7 +29,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 export default {
   created() {
     const { username, password } = this.$route.params
@@ -42,9 +41,12 @@ export default {
         username: this.username,
         password: this.password
       })
-      const { statusCode, message } = res.data
+      const { statusCode, message, data } = res.data
       if (statusCode === 200) {
         this.$toast.success(message)
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('userId', data.user.id)
+        this.$router.push('/user')
       } else {
         this.$toast.fail(message)
       }
@@ -69,7 +71,7 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
 p {
   font-size: 14px;
   padding-top: 6px;
