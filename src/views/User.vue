@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <div class="header">
+    <div class="header" @click='$router.push("/user-edit")'>
       <div class="avatar">
         <img :src="base + user.head_img" alt="">
       </div>
@@ -34,6 +34,9 @@
       <template to='/follow'>设置</template>
       <template #content></template>
     </my-navitem>
+    <div class="btn">
+      <van-button type="danger" block @click='logout'>退出登录</van-button>
+    </div>
   </div>
 </template>
 
@@ -45,27 +48,35 @@ export default {
     }
   },
   async created() {
-    const token = localStorage.getItem('token')
+    // const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
-    const res = await this.$axios.get(`/user/${userId}`, {
-      headers: {
-        Authorization: token
-      }
-    })
-    console.log(res)
+    const res = await this.$axios.get(`/user/${userId}`)
     const { statusCode, data } = res.data
     if (statusCode === 200) {
       this.user = data
-    } else if (statusCode === 401) {
-      this.$toast('用户验证失败')
-      this.$router.push('/login')
-      localStorage.removeItem('token')
-      localStorage.removeItem('userId')
     }
   },
   computed: {
     base() {
       return this.$axios.defaults.baseURL
+    }
+  },
+  methods: {
+    async logout() {
+      try {
+        await this.$dialog.confirm({
+          title: '温馨提示',
+          message: '你确定要退出本系统吗'
+        })
+      } catch {
+        return this.$toast('取消退出')
+      }
+
+      // 说明点了确认
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+      this.$router.push('/login')
+      this.$toast.success('退出成功')
     }
   }
 }
@@ -111,6 +122,9 @@ export default {
     .arrow {
       width: 24px;
     }
+  }
+  .btn {
+    padding: 16px;
   }
 }
 </style>
