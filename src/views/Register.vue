@@ -83,7 +83,7 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
 p {
   font-size: 14px;
   padding-top: 6px;
