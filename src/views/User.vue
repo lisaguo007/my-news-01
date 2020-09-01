@@ -22,7 +22,7 @@
       <template>我的关注</template>
       <template #content>关注的用户</template>
     </my-navitem>
-    <my-navitem to='/follow'>
+    <my-navitem to='/my-comment'>
       <template>我的跟帖</template>
       <template #content>跟帖/回复</template>
     </my-navitem>
