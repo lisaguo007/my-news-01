@@ -38,7 +38,8 @@ const router = new VueRouter({
 //  如果没有， 跳转到登录去
 router.beforeEach(function(to, from, next) {
   const token = localStorage.getItem('token')
-  if (to.name !== 'user' || token) {
+  const authUrls = ['/user', '/user-edit', '/my-follow', '/my-comment', '/mystar']
+  if (!authUrls.includes(to.path) || token) {
     next()
   } else {
     router.push('/login')
