@@ -26,12 +26,12 @@
       <template>我的跟帖</template>
       <template #content>跟帖/回复</template>
     </my-navitem>
-    <my-navitem>
-      <template to='/follow'>我的收藏</template>
+    <my-navitem to='/my-star'>
+      <template>我的收藏</template>
       <template #content>文章/视频</template>
     </my-navitem>
-    <my-navitem>
-      <template to='/follow'>设置</template>
+    <my-navitem to='/user-edit'>
+      <template>设置</template>
       <template #content></template>
     </my-navitem>
     <div class="btn">
