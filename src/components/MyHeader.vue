@@ -2,12 +2,12 @@
   <div>
     <div class="placeholder"></div>
     <div class='my-header'>
-    <div class="arrow" @click='back'>
-      <span class="iconfont iconjiantou2"></span>
+      <div class="arrow" @click='back'>
+        <span class="iconfont iconjiantou2"></span>
+      </div>
+      <div class="title"><slot></slot></div>
+      <div class="menu"></div>
     </div>
-    <div class="title"><slot></slot></div>
-    <div class="menu"></div>
-  </div>
   </div>
 </template>
 

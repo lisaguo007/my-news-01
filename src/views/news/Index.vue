@@ -10,14 +10,30 @@
           <span>搜索新闻</span>
         </div>
       </div>
-      <div class="user">
+      <div class="user" @click="$router.push('/user')">
         <span class="iconfont iconwode"></span>
       </div>
     </div>
     <!-- tab栏效果 -->
+    <van-sticky class="more-sticky">
+      <div class="change-tab" @click="$router.push('/edit-tab')">
+        <span class="iconfont iconlianjie"></span>
+      </div>
+    </van-sticky>
     <van-tabs v-model="active" swipeable sticky animated>
       <van-tab :title="item.name" v-for='item in tabList' :key='item.id'>
-        <my-post :post='news' v-for='news in newList' :key="news.id"></my-post>
+        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            offset='10'
+            :immediate-check='false'
+            @load="onLoad"
+          >
+            <my-post :post='news' v-for='news in newList' :key="news.id"></my-post>
+          </van-list>
+        </van-pull-refresh>
       </van-tab>
     </van-tabs>
   </div>
@@ -30,8 +46,11 @@ export default {
       active: 0,
       tabList: [],
       newList: [],
+      loading: false,
+      finished: false,
+      refreshing: false,
       pageIndex: 1,
-      pageSize: 25
+      pageSize: 10
     }
   },
   created() {
@@ -39,6 +58,13 @@ export default {
   },
   methods: {
     async getTabList() {
+      const activeList = JSON.parse(localStorage.getItem('activeList'))
+      if (activeList) {
+        this.tabList = activeList
+        // 发送请求获取第一个tab栏的数据
+        this.getNewList(this.tabList[0].id)
+        return
+      }
       const res = await this.$axios.get('/category')
       const { statusCode, data } = res.data
       if (statusCode === 200) {
@@ -59,9 +85,41 @@ export default {
       const { statusCode, data } = res.data
       // console.log(res.data.data)
       if (statusCode === 200) {
-        this.newList = data
-        console.log(this.newList)
+        this.newList = [...this.newList, ...data]
+        // console.log(this.newList)
+        this.loading = false
+        this.refreshing = false
+        if (data.length < this.pageSize) {
+          this.finished = true
+        }
       }
+    },
+    onLoad() {
+      // 异步更新数据
+      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      setTimeout(() => {
+        this.pageIndex++
+        this.getNewList(this.tabList[this.active].id)
+      }, 1000)
+    },
+    onRefresh() {
+      setTimeout(() => {
+        this.newList = []
+        this.pageIndex = 1
+        this.loading = true
+        this.getNewList(this.tabList[this.active].id)
+      }, 1000)
+    }
+  },
+  watch: {
+    active(value) {
+      this.newList = []
+      this.pageIndex = 1
+      this.loading = true
+      this.finished = false
+      setTimeout(() => {
+        this.getNewList(this.tabList[value].id)
+      }, 1000)
     }
   }
 }
@@ -108,6 +166,26 @@ export default {
         }
       }
     }
+  }
+  /deep/ .more-sticky {
+    z-index: 100;
+    .van-sticky--fixed {
+      z-index: 100;
+    }
+    .change-tab {
+      position: absolute;
+      right: 0;
+      right: 0;
+      width: 15%;
+      height: 44px;
+      background-color: #fff;
+      text-align: center;
+      line-height: 44px;
+      z-index: 9999;
+    }
+  }
+  /deep/ .van-tabs__wrap {
+    width: 85%;
   }
 }
 </style>

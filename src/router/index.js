@@ -8,6 +8,8 @@ import UserEdit from '../views/user/UserEdit.vue'
 import MyFollow from '../views/user/MyFollow.vue'
 import MyComment from '../views/user/MyComment.vue'
 import MyStar from '../views/user/MyStar.vue'
+import EditTab from '../views/news/EditTab.vue'
+import PostDetail from '../views/news/PostDetail.vue'
 
 // 导入news中的组件
 import Index from '../views/news/Index.vue'
@@ -26,7 +28,9 @@ const routes = [
   { path: '/my-follow', component: MyFollow, name: 'my-follow' },
   { path: '/my-comment', component: MyComment, name: 'my-comment' },
   { path: '/my-star', component: MyStar, name: 'my-star' },
-  { path: '/', component: Index, name: 'index' }
+  { path: '/', component: Index, name: 'index' },
+  { path: '/edit-tab', component: EditTab, name: 'edit-tab' },
+  { path: '/post-detail/:id', component: PostDetail, name: 'post-detail' }
 ]
 
 const router = new VueRouter({

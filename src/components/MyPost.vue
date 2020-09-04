@@ -1,6 +1,19 @@
 <template>
-  <div class="my-post">
-    <div class="single-img-post" v-if="post.cover.length < 3">
+  <div class="my-post" @click="$router.push(`/post-detail/${post.id}`)">
+    <div v-if="post.type === 2" class="video-post">
+      <div class="title">{{post.title}}</div>
+      <div class="video">
+        <div class="btn">
+          <span class="iconfont iconshipin"></span>
+        </div>
+        <img :src="$url(post.cover[0].url)" alt="">
+      </div>
+      <div class="user">
+        <span>{{post.user.nickname}}</span>
+        <span>{{post.comment_length}}跟帖</span>
+      </div>
+    </div>
+    <div class="single-img-post" v-else-if="post.cover.length < 3 && post.cover.length>0">
       <div class="info">
         <div class="title">{{post.title}}</div>
         <div class="user">
@@ -12,7 +25,7 @@
         <img :src="$url(post.cover[0].url)" alt="">
       </div>
     </div>
-    <div class="multiple-img-post" v-else>
+    <div class="multiple-img-post" v-else-if='post.cover.length >= 3'>
       <div class="title">{{post.title}}</div>
       <div class="imgs">
         <img :src="$url(post.cover[0].url)" alt="">
@@ -81,6 +94,37 @@ export default {
       img {
         height: 75px;
         width: 112px;
+        object-fit: cover;
+      }
+    }
+  }
+  .video-post {
+    padding: 16px;
+    border-bottom: 1px solid #e4e4e4;
+    font-size: 16px;
+    color: #333333;
+    .video {
+      position: relative;
+      margin: 10px 0;
+      .btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70px;
+        height: 70px;
+        background-color: rgba(0,0,0,.2);
+        border-radius: 50%;
+        text-align: center;
+        line-height: 70px;
+        span {
+          font-size: 42px;
+          color: rgba(255,255,255,.8);
+        }
+      }
+      img {
+        width: 100%;
+        height: 170px;
         object-fit: cover;
       }
     }
