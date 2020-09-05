@@ -46,6 +46,9 @@ export default {
         this.$toast.success(message)
         localStorage.setItem('token', data.token)
         localStorage.setItem('userId', data.user.id)
+        if (this.$route.query.back) {
+          this.$router.back()
+        }
         this.$router.push('/user')
       } else {
         this.$toast.fail(message)

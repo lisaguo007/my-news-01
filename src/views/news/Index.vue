@@ -50,7 +50,8 @@ export default {
       finished: false,
       refreshing: false,
       pageIndex: 1,
-      pageSize: 10
+      pageSize: 10,
+      timerId: ''
     }
   },
   created() {
@@ -74,6 +75,9 @@ export default {
       }
     },
     async getNewList(id) {
+      if (this.pageIndex === 1) {
+        this.newList = []
+      }
       // 发送请求获取新闻数据
       const res = await this.$axios.get('/post', {
         params: {
@@ -117,7 +121,8 @@ export default {
       this.pageIndex = 1
       this.loading = true
       this.finished = false
-      setTimeout(() => {
+      clearTimeout(this.timerId)
+      this.timerId = setTimeout(() => {
         this.getNewList(this.tabList[value].id)
       }, 1000)
     }
