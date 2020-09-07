@@ -25,6 +25,10 @@ import VueRouter from 'vue-router'
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 
+// 创建一个bus
+const bus = new Vue()
+// 把bus挂载到vue原型上
+Vue.prototype.$bus = bus
 new Vue({
   router,
   render: h => h(App)

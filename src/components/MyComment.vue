@@ -8,9 +8,14 @@
         <p>{{comment.user.nickname}}</p>
         <p>{{comment.create_date | now}}</p>
       </div>
-      <div class="right">回复</div>
+      <div class="right" @click="reply">回复</div>
     </div>
-    <my-floor :comment='comment.parent' v-if="comment.parent"></my-floor>
+    <my-floor
+    @reply='onReply'
+    :count='count'
+    :comment='comment.parent'
+    v-if="comment.parent"
+    ></my-floor>
     <div class="content">{{comment.content}}</div>
     <div></div>
   </div>
@@ -20,6 +25,28 @@
 export default {
   props: {
     comment: Object
+  },
+  data() {
+    return {
+      count: this.getCount(0, this.comment)
+    }
+  },
+  methods: {
+    getCount(num, data) {
+      if (data.parent) {
+        return this.getCount(num + 1, data.parent)
+      } else {
+        return num
+      }
+    },
+    reply() {
+      // this.$emit('reply', this.comment.id, this.comment.user.nickname)
+      this.$bus.$emit('reply', this.comment.id, this.comment.user.nickname)
+    },
+    onReply(id, nickname) {
+      console.log(id, nickname)
+      this.$bus.$emit('reply', id, nickname)
+    }
   }
 }
 </script>

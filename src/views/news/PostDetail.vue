@@ -35,13 +35,21 @@
     <!-- 评论 -->
     <div class="comment-list">
       <h3>精彩跟帖</h3>
-      <my-comment :comment='comment' v-for="comment in commentList" :key="comment.id"></my-comment>
+      <my-comment
+      :comment='comment'
+      v-for="comment in commentList"
+      :key="comment.id"
+      ></my-comment>
     </div>
 
     <!-- 底部区域 -->
-    <div class="footer">
+    <div class="footer-textarea" v-if="isShowText">
+      <textarea :placeholder="'回复' + nickname" ref='focus' v-model="content"></textarea>
+      <button @click="publish">发送</button>
+    </div>
+    <div class="footer-input" v-else>
       <div class="search">
-        <input type="text" placeholder="回复">
+        <input type="text" placeholder="回复" @focus="onFocus">
       </div>
       <span class="iconfont iconpinglun- comment"><i>102</i></span>
       <span class="iconfont iconshoucang" :class="{star: post.has_star}" @click="star"></span>
@@ -57,13 +65,35 @@ export default {
       post: {
         user: {}
       },
-      commentList: []
+      commentList: [],
+      isShowText: false,
+      content: '',
+      replyId: '',
+      nickname: ''
     }
   },
   created() {
     this.getPostDetail()
     // 获取文章的评论列表
     this.getCommentList()
+    // 给bus注册自定义事件
+    this.$bus.$on('reply', async(id, nickname) => {
+      console.log('父组件', id, nickname)
+      this.isShowText = true
+      await this.$nextTick()
+      this.$refs.focus.focus()
+      // 回显nickname
+      this.nickname = '@' + nickname
+      this.replayId = id
+    })
+  },
+  destroyed() {
+    // console.log('detail销毁')
+    // 移除$bus的自定义事件off
+    // this.$bus.$off() 移除bus上所有的事件
+    // this.$bus.$off('reply') 移除bus上所有的reply事件
+    // this.$bus.$off('reply', this.onReply) 移除bus上 一个reply事件，，，对应的这个函数就是需要移除的
+    this.$bus.$off('reply')
   },
   methods: {
     back() {
@@ -75,7 +105,7 @@ export default {
       const { statusCode, data } = res.data
       if (statusCode === 200) {
         this.post = data
-        console.log(this.post)
+        // console.log(this.post)
       }
     },
     getUrl(url) {
@@ -141,9 +171,39 @@ export default {
       const { statusCode, data } = res.data
       if (statusCode === 200) {
         this.commentList = data
-        console.log(this.commentList)
+        // console.log(this.commentList)
+      }
+    },
+    async onFocus() {
+      this.isShowText = true
+      await this.$nextTick()
+      this.$refs.focus.focus()
+    },
+    async publish() {
+      const res = await this.$axios.post(`/post_comment/${this.post.id}`, {
+        content: this.content,
+        parent_id: this.replayId
+      })
+      console.log(res)
+      const { statusCode, message } = res.data
+      if (statusCode === 200) {
+        this.$toast.success(message)
+        this.getCommentList()
+        this.content = ''
+        this.replyId = ''
+        this.nickname = ''
+        this.isShowText = false
       }
     }
+    // async onReply(id, nickname) {
+    //   console.log('父组件', id, nickname)
+    //   this.isShowText = true
+    //   await this.$nextTick()
+    //   this.$refs.focus.focus()
+    //   // 回显nickname
+    //   this.nickname = '@' + nickname
+    //   this.replayId = id
+    // }
   }
 }
 </script>
@@ -275,7 +335,7 @@ video {
     text-align: center;
   }
 }
-.footer {
+.footer-input {
   display: flex;
   position: fixed;
   height: 50px;
@@ -322,6 +382,34 @@ video {
       background-color: #ff0000;
       border-radius: 9px;
     }
+  }
+}
+.footer-textarea {
+  position: fixed;
+  bottom: 0;
+  padding: 16px;
+  background-color: #fff;
+  textarea {
+    width: 273px;
+    height: 92px;
+    padding: 10px;
+    background-color: #d7d7d7;
+    margin-right: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 0;
+    vertical-align: bottom;
+  }
+  button {
+    width: 60px;
+    height: 28px;
+    background-color: #ff0000;
+    border: 0;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 28px;
+    text-align: center;
   }
 }
 </style>
