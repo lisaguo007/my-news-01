@@ -10,6 +10,7 @@ import MyComment from '../views/user/MyComment.vue'
 import MyStar from '../views/user/MyStar.vue'
 import EditTab from '../views/news/EditTab.vue'
 import PostDetail from '../views/news/PostDetail.vue'
+import Search from '../views/news/Search.vue'
 
 // 导入news中的组件
 import Index from '../views/news/Index.vue'
@@ -30,7 +31,8 @@ const routes = [
   { path: '/my-star', component: MyStar, name: 'my-star' },
   { path: '/', component: Index, name: 'index' },
   { path: '/edit-tab', component: EditTab, name: 'edit-tab' },
-  { path: '/post-detail/:id', component: PostDetail, name: 'post-detail' }
+  { path: '/post-detail/:id', component: PostDetail, name: 'post-detail' },
+  { path: '/search', component: Search, name: 'search' }
 ]
 
 const router = new VueRouter({

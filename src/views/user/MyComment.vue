@@ -19,7 +19,7 @@
             </div>
             <div class="content">{{item.content}}
             </div>
-            <div class="origin">
+            <div class="origin" @click="$router.push(`/post-detail/${item.post.id}`)">
               <span>原文：{{item.post.title}}</span>
               <span class="iconfont iconjiantou1"></span>
             </div>
