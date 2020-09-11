@@ -1,5 +1,5 @@
 <template>
-  <div class="post-detail">
+  <div class="post-detail" v-if="isLoaded">
     <div class='header'>
       <div class="arrow" @click='back'>
         <span class="iconfont iconjiantou2"></span>
@@ -69,7 +69,8 @@ export default {
       isShowText: false,
       content: '',
       replyId: '',
-      nickname: ''
+      nickname: '',
+      isLoaded: false
     }
   },
   created() {
@@ -106,6 +107,7 @@ export default {
       if (statusCode === 200) {
         this.post = data
         // console.log(this.post)
+        this.isLoaded = true
       }
     },
     getUrl(url) {

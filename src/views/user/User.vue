@@ -2,7 +2,7 @@
   <div class="user">
     <div class="header" @click='$router.push("/user-edit")'>
       <div class="avatar">
-        <img :src="$base + user.head_img" alt="">
+        <img v-if="user.head_img" :src="$base + user.head_img" alt="">
       </div>
       <div class="content">
         <div class="name">
@@ -82,7 +82,7 @@ export default {
   .header {
     display: flex;
     border-bottom: 5px solid #e4e4e4;
-    padding: 32px 10px 32px 20px ;
+    padding: 32px 10px 32px 20px;
     margin-bottom: 8px;
     align-items: center;
     .avatar {
